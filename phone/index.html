@@ -1,8 +1,106 @@
 ﻿<!DOCTYPE html>
 <html>
-<body>
-    <p>Test Phone</p>
-</body>
+<head>
+    <title>Test Phone</title>
 
+    <style type="text/css">
+        html, body, #map-canvas {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+    <script type="text/javascript"
+            src="https://maps.googleapis.com/maps/api/js">
+    </script>
+    <script type="text/javascript">
+        function initialize() {
+            var iconBase = 'https://maps.google.com/mapfiles/kml/paddle/';
+
+            var mapOptions = {
+                center: { lat: 42.0283787, lng: -93.6452854 },
+                zoom: 15
+            };
+            var map = new google.maps.Map(document.getElementById('map-canvas'),
+                mapOptions);
+
+            var union = new google.maps.Marker({
+                position: { lat: 42.0248125, lng: -93.6466157 },
+                map: map,
+                title: "Memorial Union",
+                icon: iconBase + "ylw-circle.png"
+            });
+
+            var parks = new google.maps.Marker({
+                position: { lat: 42.0275125, lng: -93.6490157 },
+                map: map,
+                title: "Parks Library",
+                icon: iconBase + "red-circle.png"
+            });
+
+            var bessey = new google.maps.Marker({
+                position: { lat: 42.0285125, lng: -93.6450157 },
+                map: map,
+                title: "Bessey Hall",
+                icon: iconBase + "grn-circle.png"
+            });
+
+            var unionContent = '<div id="unionContent">' +
+      '<div id="unionData">' +
+      '</div>' +
+      '<h1 id="unionHeading" class="firstHeading">Memorial Union</h1>' +
+      '<div id="unionBodyContent">' +
+      '</div>' +
+      '</div>';
+
+            var unionwindow = new google.maps.InfoWindow({
+                content: unionContent
+            });
+
+            google.maps.event.addListener(union, 'click', function () {
+                unionwindow.open(map, union);
+            });
+
+
+            var parksContent = '<div id="parksContent">' +
+'<div id="parksData">' +
+'</div>' +
+'<h1 id="parksHeading">Parks Library</h1>' +
+'<div id="parksBodyContent">' +
+'</div>' +
+'</div>';
+
+            var parkswindow = new google.maps.InfoWindow({
+                content: parksContent
+            });
+
+            google.maps.event.addListener(parks, 'click', function () {
+                parkswindow.open(map, parks);
+            });
+
+
+            var besseyContent = '<div id="besseyContent">' +
+'<div id="besseyData">' +
+'</div>' +
+'<h1 id="besseyHeading">Bessey Hall</h1>' +
+'<div id="besseyBodyContent">' +
+'</div>' +
+'</div>';
+
+            var besseywindow = new google.maps.InfoWindow({
+                content: besseyContent
+            });
+
+            google.maps.event.addListener(bessey, 'click', function () {
+                besseywindow.open(map, bessey);
+            });
+        }
+        google.maps.event.addDomListener(window, 'load', initialize);
+
+    </script>
+</head>
+<body>
+    <div id="map-canvas"></div>
+</body>
 
 </html>
