@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Test Phone</title>
+    <title>ISU Bike Share Phone App</title>
 
     <style type="text/css">
         html, body, #map-canvas {
@@ -14,6 +14,23 @@
             src="https://maps.googleapis.com/maps/api/js">
     </script>
     <script type="text/javascript">
+        window.onload = function () {
+            var xmlhttp;
+            if (window.XMLHttpRequest) { // code for IE7+, Firefox, Chrome, Opera, Safari
+                xmlhttp = new XMLHttpRequest();
+            }
+            else { // code for IE6, IE5
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    document.getElementById("weatherDiv").innerHTML = xmlhttp.responseText;
+                }
+            }
+            xmlhttp.open("GET", "http://api.openweathermap.org/data/2.5/weather?q=Ames,US&mode=html&units=imperial", true);
+            xmlhttp.send();
+        }
+
         function initialize() {
             var iconBase = 'https://maps.google.com/mapfiles/kml/paddle/';
 
@@ -101,8 +118,8 @@
 </head>
 <body>
     <div id="ugh" style="height: 10%; background-color: #8B0000; color: #FFFFFF; font-size: 3em; text-align: center; padding-top: 0.5cm;">Bike Share - Iowa State University</div>
-    <div id="map-canvas" style="height: 75%;"></div>
-    <div id="test" style="height: 15%;">Current Weather <br><br> Bikes are currently <font color="green">being released</font></div>
+    <div id="map-canvas" style="height: 70%;"></div>
+    <div id="test" style="height: 20%;">Current Weather <div id="weatherDiv"></div> <br> Bikes are currently <font color="green">being released</font></div>
 </body>
 
 </html>
