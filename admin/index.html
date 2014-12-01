@@ -39,7 +39,42 @@
 
         function updateRows() {
             var sDate = new Date(document.getElementById("startDate").value);
+            sDate.setDate(sDate.getDate() + 1);
             var eDate = new Date(document.getElementById("endDate").value);
+            eDate.setDate(eDate.getDate() + 1);
+            var row1_2Date = new Date("2014-11-30"); //all these are one day off because javascript is weird with time zones
+            var row3_4Date = new Date("2014-12-01");
+            var row5_7Date = new Date("2014-12-02");
+            var row8Date = new Date("2014-12-03");
+
+            if (sDate > row1_2Date || eDate < row1_2Date) {
+                document.getElementById("row1").style.display = "none";
+                document.getElementById("row2").style.display = "none";
+            } else {
+                document.getElementById("row1").style.display = "";
+                document.getElementById("row2").style.display = "";
+            }
+            if (sDate > row3_4Date || eDate < row3_4Date) {
+                document.getElementById("row3").style.display = "none";
+                document.getElementById("row4").style.display = "none";
+            } else {
+                document.getElementById("row3").style.display = "";
+                document.getElementById("row4").style.display = "";
+            }
+            if (sDate > row5_7Date || eDate < row5_7Date) {
+                document.getElementById("row5").style.display = "none";
+                document.getElementById("row6").style.display = "none";
+                document.getElementById("row7").style.display = "none";
+            } else {
+                document.getElementById("row5").style.display = "";
+                document.getElementById("row6").style.display = "";
+                document.getElementById("row7").style.display = "";
+            }
+            if (sDate > row8Date || eDate < row8Date) {
+                document.getElementById("row8").style.display = "none";
+            } else {
+                document.getElementById("row8").style.display = "";
+            }
         }
 
         function initialize() {
@@ -304,12 +339,8 @@
         </div>
     </div>
     <div id="test" style="height: 20%;">
-        <div style="float: left">
             Current Weather <div id="weatherDiv"></div> <br> Bikes are currently <font id="releaseStatus" color="green">being released</font>
-        </div>
-        <div style="float: right">
             <button id="releaseButton" onclick="toggleRelease()" style="color: red">Stop Bike Release</button>
-        </div>
     </div>
 </body>
 
