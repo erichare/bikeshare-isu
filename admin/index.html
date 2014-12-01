@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <title>ISU Bike Share Admin</title>
@@ -196,9 +196,11 @@
 </head>
 <body>
     <div id="ugh" style="height: 10%; background-color: #8B0000; color: #FFFFFF; font-size: 3em; text-align: center; padding-top: 0.5cm;">Bike Share Admin- Iowa State University</div>
-    <div style="width: 100%; height: 70%">
+    <div style="width: 100%; height: 92%">
         <div id="map-canvas" style="width: 60%; float: left"></div>
         <div style="width: 40%; height: 100%; float: right; text-align: center">
+        Bikes are currently <font id="releaseStatus" color="green">being released</font>
+            <button id="releaseButton" onclick="toggleRelease()" style="color: red">Stop Bike Release</button>
             <h2 style="color: #8B0000;"><u>Bikes Currently Checked Out</u></h2>
             <table style="width: 100%">
                 <thead>
@@ -337,10 +339,6 @@
                 </tbody>
             </table>
         </div>
-    </div>
-    <div id="test" style="height: 20%;">
-            Current Weather <div id="weatherDiv"></div> <br> Bikes are currently <font id="releaseStatus" color="green">being released</font>
-            <button id="releaseButton" onclick="toggleRelease()" style="color: red">Stop Bike Release</button>
     </div>
 </body>
 
