@@ -14,6 +14,12 @@
             src="https://maps.googleapis.com/maps/api/js">
     </script>
     <script type="text/javascript">
+        var map;
+        var marker;
+        var union;
+        var parks;
+        var bessey;
+        var iconBase = 'https://maps.google.com/mapfiles/kml/paddle/';
         window.onload = function () {
             var xmlhttp;
             if (window.XMLHttpRequest) { // code for IE7+, Firefox, Chrome, Opera, Safari
@@ -31,31 +37,35 @@
             xmlhttp.send();
         }
 
+        function updateRows() {
+            var sDate = new Date(document.getElementById("startDate").value);
+            var eDate = new Date(document.getElementById("endDate").value);
+        }
+
         function initialize() {
-            var iconBase = 'https://maps.google.com/mapfiles/kml/paddle/';
 
             var mapOptions = {
                 center: { lat: 42.0283787, lng: -93.6452854 },
                 zoom: 17
             };
-            var map = new google.maps.Map(document.getElementById('map-canvas'),
+            map = new google.maps.Map(document.getElementById('map-canvas'),
                 mapOptions);
 
-            var union = new google.maps.Marker({
+            union = new google.maps.Marker({
                 position: { lat: 42.0248125, lng: -93.6466157 },
                 map: map,
                 title: "Memorial Union",
                 icon: iconBase + "ylw-circle.png"
             });
 
-            var parks = new google.maps.Marker({
+            parks = new google.maps.Marker({
                 position: { lat: 42.0275125, lng: -93.6490157 },
                 map: map,
                 title: "Parks Library",
                 icon: iconBase + "red-circle.png"
             });
 
-            var bessey = new google.maps.Marker({
+            bessey = new google.maps.Marker({
                 position: { lat: 42.0285125, lng: -93.6450157 },
                 map: map,
                 title: "Bessey Hall",
@@ -114,13 +124,46 @@
         }
         google.maps.event.addDomListener(window, 'load', initialize);
 
+        function createMarker(latitude, longitude) {
+            if (marker != null || marker != undefined) {
+                marker.setMap(null);
+            }
+            marker = new google.maps.Marker({
+                position: { lat: latitude, lng: longitude },
+                map: map,
+                icon: iconBase + "blu-stars-lv.png"
+            });
+        }
+
+        function toggleRelease() {
+            var btn = document.getElementById("releaseButton");
+            var btnTxt = btn.innerHTML;
+            var status = document.getElementById("releaseStatus");
+            if (btnTxt == "Start Bike Release") {
+                btn.innerHTML = "Stop Bike Release";
+                btn.style.color = "red";
+                status.innerHTML = "being released";
+                status.style.color = "green";
+                parks.setIcon(iconBase + "red-circle.png");
+                union.setIcon(iconBase + "ylw-circle.png");
+                bessey.setIcon(iconBase + "grn-circle.png");
+            } else {
+                btn.innerHTML = "Start Bike Release";
+                btn.style.color = "green";
+                status.innerHTML = "not being released";
+                status.style.color = "red";
+                parks.setIcon(iconBase + "red-circle.png");
+                union.setIcon(iconBase + "red-circle.png");
+                bessey.setIcon(iconBase + "red-circle.png");
+            }
+        }
     </script>
 </head>
 <body>
     <div id="ugh" style="height: 10%; background-color: #8B0000; color: #FFFFFF; font-size: 3em; text-align: center; padding-top: 0.5cm;">Bike Share Admin- Iowa State University</div>
     <div style="width: 100%; height: 70%">
         <div id="map-canvas" style="width: 60%; float: left"></div>
-        <div style="width: 40%; float: right; text-align: center">
+        <div style="width: 40%; height: 100%; float: right; text-align: center">
             <h2 style="color: #8B0000;"><u>Bikes Currently Checked Out</u></h2>
             <table style="width: 100%">
                 <thead>
@@ -138,32 +181,31 @@
                         <td>11/30/2014 3:45PM</td>
                         <td>Memorial Union</td>
                         <td>Alex Whigham</td>
-                        <td>No idea</td>
+                        <td><button onclick="createMarker(42.0245125, -93.6458157)">Show On Map</button></td>
                     </tr>
                     <tr>
                         <td>49</td>
                         <td>12/01/2014 7:26AM</td>
                         <td>Parks Library</td>
                         <td>Eric Hare</td>
-                        <td>No idea</td>
+                        <td><button onclick="createMarker(42.0290125, -93.6440157)">Show On Map</button></td>
                     </tr>
                     <tr>
                         <td>31</td>
                         <td>11/30/2014 8:51PM</td>
                         <td>Memorial Union</td>
                         <td>John George</td>
-                        <td>No idea</td>
+                        <td><button onclick="createMarker(42.0255125, -93.6460157)">Show On Map</button></td>
                     </tr>
                     <tr>
                         <td>203</td>
                         <td>12/02/2014 1:06AM</td>
                         <td>Bessey Hall</td>
                         <td>Robyn Lutz</td>
-                        <td>No idea</td>
+                        <td><button onclick="createMarker(42.0265125, -93.6490157)">Show On Map</button></td>
                     </tr>
                 </tbody>
             </table>
-            <br />
             <h2 style="color: #8B0000;"><u>Damaged Bikes</u></h2>
             <table style="width: 100%">
                 <thead>
@@ -189,11 +231,86 @@
                     </tr>
                 </tbody>
             </table>
-            <br />
-            <h2 style="color: #8B0000;"><u>Transactions Between Two Dates</u></h2><br />
+            <h2 style="color: #8B0000;"><u>Transactions Between <input id="startDate" type="date" value="2014-11-25" onchange="updateRows()"/> and <input id="endDate" type="date" value="2014-12-02" onchange="updateRows()"/></u></h2>
+            <table style="width: 100%">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Dock</th>
+                        <th>Record Type</th>
+                        <th>Inserted By</th>
+                        <th>Inserted Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr id="row1">
+                        <td>312</td>
+                        <td>Bessey Hall</td>
+                        <td>Check In</td>
+                        <td>Eric Hare</td>
+                        <td>11/29/2014 5:03PM</td>
+                    </tr>
+                    <tr id="row2">
+                        <td>312</td>
+                        <td>Bessey Hall</td>
+                        <td>Damage</td>
+                        <td>Eric Hare</td>
+                        <td>11/29/2014 5:03PM</td>
+                    </tr>
+                    <tr id="row3">
+                        <td>536</td>
+                        <td>Memorial Union</td>
+                        <td>Check Out</td>
+                        <td>Alex Whigham</td>
+                        <td>11/30/2014 3:45PM</td>
+                    </tr>
+                    <tr id="row4">
+                        <td>31</td>
+                        <td>Memorial Union</td>
+                        <td>Check Out</td>
+                        <td>John George</td>
+                        <td>11/30/2014 8:51PM</td>
+                    </tr>
+                    <tr id="row5">
+                        <td>49</td>
+                        <td>Parks Library</td>
+                        <td>Check Out</td>
+                        <td>Eric Hare</td>
+                        <td>12/01/2014 7:26AM</td>
+                    </tr>
+                    <tr id="row6">
+                        <td>11</td>
+                        <td>Memorial Union</td>
+                        <td>Check In</td>
+                        <td>Alex Whigham</td>
+                        <td>12/01/2014 9:00AM</td>
+                    </tr>
+                    <tr id="row7">
+                        <td>11</td>
+                        <td>Memorial Union</td>
+                        <td>Damage</td>
+                        <td>Alex Whigham</td>
+                        <td>12/01/2014 9:00AM</td>
+                    </tr>
+                    <tr id="row8">
+                        <td>203</td>
+                        <td>Bessey Hall</td>
+                        <td>Check Out</td>
+                        <td>Robyn Lutz</td>
+                        <td>12/02/2014 1:06AM</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
-    <div id="test" style="height: 20%;">Current Weather <div id="weatherDiv"></div> <br> Bikes are currently <font color="green">being released</font></div>
+    <div id="test" style="height: 20%;">
+        <div style="float: left">
+            Current Weather <div id="weatherDiv"></div> <br> Bikes are currently <font id="releaseStatus" color="green">being released</font>
+        </div>
+        <div style="float: right">
+            <button id="releaseButton" onclick="toggleRelease()" style="color: red">Stop Bike Release</button>
+        </div>
+    </div>
 </body>
 
 </html>
